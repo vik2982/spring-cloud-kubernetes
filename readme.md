@@ -4,7 +4,7 @@ In this project I demonstrate an implementation of spring cloud microservices de
 
 
 ## Getting Started 
-Prerequisite - Knowledge of spring boot, docker and kubernetes
+Prerequisite - Knowledge of spring boot, docker and kubernetes.
 The services can deployed on a local Kubernetes single-node cluster (I have tested on docker desktop on mac and GKE).
 
 ## Before you start
@@ -12,8 +12,8 @@ Go to the `k8s` directory. Here several YAML scripts need to be applied before r
 1. `privileges.yaml` - Spring Cloud Kubernetes requires access to the Kubernetes API in order to be able to retrieve a list of addresses for pods running for a single service
 2. `mongo-secret.yaml` - credentials for MongoDB
 3. `mongo-configmap.yaml` - user for MongoDB
-4. `mongo.yaml` - `Deployment` for MongoDB
-5. `mongo-express.yaml` - `Deployment` for MongoExpress web console for interacting with mongo db
+4. `mongo.yaml` - Deployment for MongoDB
+5. `mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db
 Just apply these scripts using `kubectl apply`.
 
 Mongo express is accessible at http://localhost:8081/
