@@ -21,13 +21,13 @@ Mongo express is accessible at http://localhost:8081/
 ### Usage
 1. Build Maven projects : `mvn clean package`
 2. Build Docker images for each module using command, for example: `docker build -t vik/employee:1.0 .`
-3. Create new kubernetes namespace for the microservices to run in - kubectl create ns vik
+3. Create new kubernetes namespace for the microservices to run in - `kubectl create ns vik`
 4. Apply all templates using command: `kubectl apply -f deployment.yaml`
 5. Check status with `kubectl get all` and `kubectl logs {pod-name}`
-6. Install ingress - kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.1/deploy/static/provider/cloud/deploy.yaml
+6. Install ingress - `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.1/deploy/static/provider/cloud/deploy.yaml`
 7. Check the namespace ingress-nginx has been created and the nginx-controller pod in this namespace is running - install kubens to list namespaces
 8. Add to hosts file: 127.0.0.1 microservices.info (on mac run command sudo vi /private/etc/hosts)
-9. kubectl apply -f ingress.yaml
+9. `kubectl apply -f ingress.yaml`
 
 Add data to employee table
 `curl --location --request POST 'http://microservices.info/employee' \
