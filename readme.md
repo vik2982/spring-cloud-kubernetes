@@ -5,29 +5,48 @@ In this project I demonstrate an implementation of spring cloud microservices de
 
 ## Getting Started 
 Prerequisite - Knowledge of spring boot, docker and kubernetes.
-The services can deployed on a local Kubernetes single-node cluster (I have tested on docker desktop on mac and GKE).
+I have tested the solution on a local Kubernetes single node cluster using docker desktop on mac. 
+I have also tested on a multiple node cluster using GKE.
 
-## Before you start
+## Usage
+
+1. `kubectl create ns vik` - Create new kubernetes namespace 
+2. `kubens vik` - use newly created namespace
+3. `kubectl apply -f privileges.yaml` - Spring Cloud Kubernetes requires access to the Kubernetes API in order to be able to retrieve a list of addresses for pods running for a single service
+
+### Database setup
 Go to the `k8s` directory. Here several YAML scripts need to be applied before running the microservices.
-1. `privileges.yaml` - Spring Cloud Kubernetes requires access to the Kubernetes API in order to be able to retrieve a list of addresses for pods running for a single service
-2. `mongo-secret.yaml` - credentials for MongoDB
-3. `mongo-configmap.yaml` - user for MongoDB
-4. `mongo.yaml` - Deployment for MongoDB
-5. `mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db
-Just apply these scripts using `kubectl apply`.
+1. `kubectl apply -f mongo-secret.yaml` - credentials for MongoDB
+2. `kubectl apply -f mongo-configmap.yaml` - user for MongoDB
+3. `kubectl apply -f mongo.yaml` - Deployment for MongoDB
+4. `kubectl apply -f mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db
 
-Mongo express is accessible at http://localhost:8081/
 
-### Usage
-1. Build Maven projects : `mvn clean package`
+When using docker-desktop locally mongo express is accessible at http://localhost:8081/
+
+### Build and deploy microservices
+1. `mvn clean package` - In root folder this will build both modules employee and department 
 2. Build Docker images for each module using command, for example: `docker build -t vik/employee:1.0 .`
-3. Create new kubernetes namespace for the microservices to run in - `kubectl create ns vik`
-4. Apply all templates using command: `kubectl apply -f deployment.yaml`
+3. Apply all templates using command: `kubectl apply -f deployment.yaml`
 5. Check status with `kubectl get all` and `kubectl logs {pod-name}`
-6. Install ingress - `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.1/deploy/static/provider/cloud/deploy.yaml`
-7. Check the namespace ingress-nginx has been created and the nginx-controller pod in this namespace is running - install kubens to list namespaces
-8. Add to hosts file: 127.0.0.1 microservices.info (on mac run command sudo vi /private/etc/hosts)
-9. `kubectl apply -f ingress.yaml`
+
+### Ingress
+1. `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.1/deploy/static/provider/cloud/deploy.yaml` - Install ingress
+2. `kubens ingress-nginx` - Move to the newly created namespace ingress-nginx 
+3. `kubectl get all` - Check the nginx-controller pod in this namespace is running
+
+#### Local Ingress
+1. Add to hosts file: 127.0.0.1 microservices.info (on mac run command sudo vi /private/etc/hosts)
+2. `kubectl apply -f ingress.yaml`
+
+#### GKE Ingress
+1. `kubectl apply -f ingress-gke.yaml`
+2. `kubens ingress-nginx` - make sure you are in the namespace ingress-nginx 
+3. `kubectl get service` - note the external ip address
+
+### Invoke application
+
+NOTE: When running on gke replace microservices.info in the following commands with the external ip address as noted above
 
 Add data to employee table
 `curl --location --request POST 'http://microservices.info/employee' \
