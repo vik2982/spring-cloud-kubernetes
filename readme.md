@@ -4,8 +4,8 @@ In this project I demonstrate an implementation of spring cloud microservices de
 
 
 ## Getting Started 
-Prerequisite - Knowledge of spring boot, docker and kubernetes.
-I have tested the solution on a local Kubernetes single node cluster using docker desktop on mac. 
+Prerequisite - Knowledge of spring boot, docker and kubernetes.  
+I have tested the solution on a local Kubernetes single node cluster using docker desktop on mac.   
 I have also tested on a multiple node cluster using GKE.
 
 ## Usage
@@ -22,7 +22,8 @@ Go to the `k8s` directory. Here several YAML scripts need to be applied before r
 4. `kubectl apply -f mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db
 
 
-When using docker-desktop locally mongo express is accessible at http://localhost:8081/
+When using docker-desktop locally mongo express is accessible at http://localhost:8081/.   
+When using GKE do `kubectl get service` and see the mongo-express-service - use the external ip address instead of localhost
 
 ### Build and deploy microservices
 1. `mvn clean package` - In root folder this will build both modules employee and department 
