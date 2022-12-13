@@ -28,8 +28,14 @@ When using GKE do `kubectl get service` and see the mongo-express-service - use 
 ### Build and deploy microservices
 1. `mvn clean package` - In root folder this will build both modules employee and department 
 2. Build Docker images for each module using command, for example: `docker build -t vik/employee:1.0 .`
-3. Apply all templates using command: `kubectl apply -f deployment.yaml`
-5. Check status with `kubectl get all` and `kubectl logs {pod-name}`
+#### GKE
+1. Upload the docker images to google container registry:  
+`docker tag vik/employee:1.0 gcr.io/${GOOGLE_CLOUD_PROJECT}/vik/employee:1.0`  
+`docker push gcr.io/${GOOGLE_CLOUD_PROJECT}/vik/employee:1.0`
+2. Update the image in deployment.yaml to use the image from container registry
+#### Local docker-desktop and GKE
+1. Apply all templates using command: `kubectl apply -f deployment.yaml`
+2. Check status with `kubectl get all` and `kubectl logs {pod-name}`
 
 ### Ingress
 1. `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.1/deploy/static/provider/cloud/deploy.yaml` - Install ingress
