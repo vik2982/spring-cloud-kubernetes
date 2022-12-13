@@ -44,12 +44,14 @@ When using GKE do `kubectl get service` and see the mongo-express-service - use 
 
 #### Local Ingress
 1. Add to hosts file: 127.0.0.1 microservices.info (on mac run command sudo vi /private/etc/hosts)
-2. `kubectl apply -f ingress.yaml`
+2. `kubens vik`  
+3. `kubectl apply -f ingress.yaml`
 
 #### GKE Ingress
-1. `kubectl apply -f ingress-gke.yaml`
-2. `kubens ingress-nginx` - make sure you are in the namespace ingress-nginx 
-3. `kubectl get service` - note the external ip address
+1. Browse to the external ip of the nginx service.  You should see a 404 nginx page
+2. `kubens vik` 
+3. In ingress.yaml remove host line `kubectl apply -f ingress.yaml`
+4. `kubectl get service` - note the external ip address
 
 ### Invoke application
 
