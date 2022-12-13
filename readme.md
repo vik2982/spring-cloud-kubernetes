@@ -50,8 +50,9 @@ When using GKE do `kubectl get service` and see the mongo-express-service - use 
 #### GKE Ingress
 1. Browse to the external ip of the nginx service.  You should see a 404 nginx page
 2. `kubens vik` 
-3. In ingress.yaml remove host line `kubectl apply -f ingress.yaml`
-4. `kubectl get service` - note the external ip address
+3. In ingress.yaml remove host line and put hyphen before http on following line
+4. `kubectl apply -f ingress.yaml`
+5. `kubectl get service` - note the external ip address
 
 ### Invoke application
 
