@@ -52,11 +52,11 @@ When using GKE do `kubectl get service` and see the mongo-express-service - use 
 2. `kubens vik` 
 3. In ingress.yaml remove host line and put hyphen before http on following line
 4. `kubectl apply -f ingress.yaml`
-5. `kubectl get service` - note the external ip address
+5. `kubectl get ingress` - note the address (it will be the same as the address you browsed to where you got the 404 page)
 
 ### Invoke application
 
-NOTE: When running on gke replace microservices.info in the following commands with the external ip address as noted above
+NOTE: When running on gke replace microservices.info in the following commands with the ingress address as noted above
 
 Add data to employee table
 `curl --location --request POST 'http://microservices.info/employee' \
