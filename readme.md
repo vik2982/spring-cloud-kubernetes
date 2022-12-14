@@ -25,7 +25,9 @@ Go to the `k8s` directory. Here several YAML scripts need to be applied before r
 Mongo express is accessible at `http://localhost:30000`   
 
 #### GKE
+Ensure you have a firewall rule to allow ingress to the node on port 30000 - `gcloud compute firewall-rules create test-node-port --allow tcp:30000`  
 Do `kubectl get node -o wide` and see the external ip address of the node - Mongo express is accessible at `http://{node_external_ip):30000`  If you have multiple nodes you can use any node as services span nodes.   
+
 You can also change the type of the service in mongo-express.yaml to LoadBalancer when using GKE.  In which case do `kubectl get service` and see the mongo-express-service.  Mongo express is accessible at `http://{service_external_ip):8081` (where 8081 is defined as the service port)
 
 ### Build and deploy microservices
