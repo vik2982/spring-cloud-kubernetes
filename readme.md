@@ -42,12 +42,12 @@ When using GKE do `kubectl get service` and see the mongo-express-service - use 
 2. `kubens ingress-nginx` - Move to the newly created namespace ingress-nginx 
 3. `kubectl get all` - Check the nginx-controller pod in this namespace is running
 
-#### Local Ingress
+#### Local docker-desktop
 1. Add to hosts file: 127.0.0.1 microservices.info (on mac run command sudo vi /private/etc/hosts)
 2. `kubens vik`  
 3. `kubectl apply -f ingress.yaml`
 
-#### GKE Ingress
+#### GKE
 1. Browse to the external ip of the nginx service.  You should see a 404 nginx page
 2. `kubens vik` 
 3. In ingress.yaml remove host line and put hyphen before http on following line
