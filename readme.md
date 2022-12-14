@@ -21,9 +21,12 @@ Go to the `k8s` directory. Here several YAML scripts need to be applied before r
 3. `kubectl apply -f mongo.yaml` - Deployment for MongoDB
 4. `kubectl apply -f mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db
 
+#### Local docker-desktop
+Mongo express is accessible at `http://localhost:30000`   
 
-When using docker-desktop locally mongo express is accessible at http://localhost:8081/.   
-When using GKE do `kubectl get service` and see the mongo-express-service - use the external ip address instead of localhost
+#### GKE
+Do `kubectl get node -o wide` and see the external ip address of the node - Mongo express is accessible at `http://{node_external_ip):30000`  If you have multiple nodes you can use any node as services span nodes.   
+You can also change the type of the service in mongo-express.yaml to LoadBalancer when using GKE.  In which case do `kubectl get service` and see the mongo-express-service.  Mongo express is accessible at `http://{service_external_ip):8081` (where 8081 is defined as the service port)
 
 ### Build and deploy microservices
 1. `mvn clean package` - In root folder this will build both modules employee and department 
