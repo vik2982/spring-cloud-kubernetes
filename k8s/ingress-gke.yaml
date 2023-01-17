@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gateway-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: "/employee(/|$)(.*)"
+        backend:
+          service:          
+            name: employee
+            port: 
+              number: 8080
+      - pathType: Prefix
+        path: "/department(/|$)(.*)"
+        backend:
+          service:          
+            name: department
+            port: 
+              number: 8080
