@@ -55,9 +55,8 @@ You can also change the type of the service in mongo-express.yaml to LoadBalance
 #### GKE
 1. Browse to the external ip of the nginx service.  You should see a 404 nginx page
 2. `kubens vik` 
-3. In ingress.yaml remove host line and put hyphen before http on following line
-4. `kubectl apply -f ingress.yaml`
-5. `kubectl get ingress` - note the address (it will be the same as the address you browsed to where you got the 404 page)
+3. `kubectl apply -f ingress-gke.yaml`
+4. `kubectl get ingress` - note the address (it will be the same as the address you browsed to where you got the 404 page)
 
 ### Invoke application
 
