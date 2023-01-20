@@ -18,37 +18,37 @@ import com.vik.spring.cloud.kubernetes.department.repository.DepartmentRepositor
 @RestController
 public class DepartmentController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentController.class);
 
-    DepartmentRepository repository;
-    EmployeeClient employeeClient;
+  DepartmentRepository repository;
+  EmployeeClient employeeClient;
 
-    public DepartmentController(DepartmentRepository repository, EmployeeClient employeeClient) {
-        this.repository = repository;
-        this.employeeClient = employeeClient;
-    }
+  public DepartmentController(DepartmentRepository repository, EmployeeClient employeeClient) {
+    this.repository = repository;
+    this.employeeClient = employeeClient;
+  }
 
-    @GetMapping("/feign")
-    public List<Employee> listRest() {
-        return employeeClient.findByDepartment("1");
-    }
+  @GetMapping("/feign")
+  public List<Employee> listRest() {
+    return employeeClient.findByDepartment("1");
+  }
 
-    @PostMapping("/")
-    public Department add(@RequestBody Department department) {
-        LOGGER.info("Department add: {}", department);
-        return repository.save(department);
-    }
+  @PostMapping("/")
+  public Department add(@RequestBody Department department) {
+    LOGGER.info("Department add: {}", department);
+    return repository.save(department);
+  }
 
-    @GetMapping("/{id}")
-    public Department findById(@PathVariable("id") String id) {
-        LOGGER.info("Department find: id={}", id);
-        return repository.findById(id).get();
-    }
+  @GetMapping("/{id}")
+  public Department findById(@PathVariable("id") String id) {
+    LOGGER.info("Department find: id={}", id);
+    return repository.findById(id).get();
+  }
 
-    @GetMapping("/")
-    public Iterable<Department> findAll() {
-        LOGGER.info("Department find");
-        return repository.findAll();
-    }
+  @GetMapping("/")
+  public Iterable<Department> findAll() {
+    LOGGER.info("Department find");
+    return repository.findAll();
+  }
 
 }

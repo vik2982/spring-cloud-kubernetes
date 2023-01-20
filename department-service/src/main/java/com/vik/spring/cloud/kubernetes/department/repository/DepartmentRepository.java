@@ -8,6 +8,6 @@ import com.vik.spring.cloud.kubernetes.department.model.Department;
 
 public interface DepartmentRepository extends CrudRepository<Department, String> {
 
-	List<Department> findByOrganizationId(String organizationId);
-	
+  List<Department> findByOrganizationId(String organizationId);
+
 }

@@ -11,9 +11,9 @@ import java.util.List;
 @FeignClient(name = "employee")
 public interface EmployeeClient {
 
-    @GetMapping("/department/{departmentId}")
-    List<Employee> findByDepartment(@PathVariable("departmentId") String departmentId);
+  @GetMapping("/department/{departmentId}")
+  List<Employee> findByDepartment(@PathVariable("departmentId") String departmentId);
 
-    @GetMapping("/department-with-delay/{departmentId}")
-    List<Employee> findByDepartmentWithDelay(@PathVariable("departmentId") String departmentId);
+  @GetMapping("/department-with-delay/{departmentId}")
+  List<Employee> findByDepartmentWithDelay(@PathVariable("departmentId") String departmentId);
 }
