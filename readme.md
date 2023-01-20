@@ -101,12 +101,12 @@ The last curl demonstrates inter service communication where department-service 
 
 ### Health URLS
 
-http://{ingress_ip}/employee/actuator/health
-http://{ingress_ip}/employee/actuator/health/liveness
+http://{ingress_ip}/employee/actuator/health  
+http://{ingress_ip}/employee/actuator/health/liveness  
 http://{ingress_ip}/employee/actuator/health/readiness
 
-http://{ingress_ip}/department/actuator/health
-http://{ingress_ip}/department/actuator/health/liveness
+http://{ingress_ip}/department/actuator/health  
+http://{ingress_ip}/department/actuator/health/liveness  
 http://{ingress_ip}/department/actuator/health/readiness
 
 ## Architecture
