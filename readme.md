@@ -22,7 +22,8 @@ Go to the `k8s` directory. Here several YAML scripts need to be applied before r
 4. `kubectl apply -f mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db
 
 #### Local docker-desktop
-Mongo express is accessible at `http://localhost:30000`   
+Mongo express is accessible at `http://localhost:30000`  
+You can create more databases via mongo express but you will need to assign users to the newly created database - https://www.mongodb.com/docs/manual/tutorial/create-users/.  Open interactive terminal in the mongo pod and then you can execute the commands
 
 #### GKE
 Ensure you have a firewall rule to allow ingress to the node on port 30000 - `gcloud compute firewall-rules create test-node-port --allow tcp:30000`  

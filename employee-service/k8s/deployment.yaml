@@ -23,35 +23,42 @@ spec:
           httpGet:
             path: /actuator/health/liveness
             port: 8080
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 3
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
             port: 8080
-          initialDelaySeconds: 5
+          initialDelaySeconds: 30
           periodSeconds: 3
-        env:
-        - name: MONGO_DATABASE
-          valueFrom:
-            configMapKeyRef:
-              name: mongodb-configmap
-              key: database-name
-        - name: MONGO_USERNAME
+        env:    
+        - name: SPRING_DATA_MONGODB_USERNAME
           valueFrom:
             secretKeyRef:
               name: mongodb-secret
               key: mongo-root-username
-        - name: MONGO_PASSWORD
+        - name: SPRING_DATA_MONGODB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mongodb-secret
               key: mongo-root-password
-        - name: MONGO_DATABASE_URL
-          valueFrom: 
+        - name: SPRING_DATA_MONGODB_HOST
+          valueFrom:
             configMapKeyRef:
               name: mongodb-configmap
               key: database_url
+        #- name: SPRING_APPLICATION_JSON
+        #  valueFrom:
+        #    configMapKeyRef:
+        #      name: springboot-configuration
+        #      key: dev-config.json
+        volumeMounts:
+          - name: app-config-vol
+            mountPath: /usr/apps/config
+      volumes:
+        - name: app-config-vol
+          configMap:
+            name: springboot-configuration
 ---
 apiVersion: v1
 kind: Service

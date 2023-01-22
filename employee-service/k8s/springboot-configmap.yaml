@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: springboot-configuration
+data:
+  application.properties: |
+    spring.data.mongodb.database=admin
+  #dev-config.json:
+  #  '{
+  #    "spring.data.mongodb.database": "admin"
+  #   }'
