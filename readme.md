@@ -120,11 +120,11 @@ The example microservices consists of the following modules:
 
 Ensure existing employee deployment is uninstalled
 
-`cd employee-service`
-`helm install dev-helm helm -f helm/values-dev.yaml` - note this also installs the configmap springboot-configuration (if its already installed this command will fail and you will need to delete the configmap)
-`helm ls - a` - shows our installed helm chart
-`helm upgrade dev-helm helm -f helm/values-dev.yaml` - after updating values-dev.yaml run this command. Note just changing databaseName will not have any affect.  The deployment need to be modified hence update containerName
-`helm rollback dev-helm 1` - rolls back to previous version
+`cd employee-service`  
+`helm install dev-helm helm -f helm/values-dev.yaml` - note this also installs the configmap springboot-configuration (if its already installed this command will fail and you will need to delete the configmap)  
+`helm ls - a` - shows our installed helm chart  
+`helm upgrade dev-helm helm -f helm/values-dev.yaml` - after updating values-dev.yaml run this command. Note just changing databaseName will not have any affect.  The deployment need to be modified hence update containerName  
+`helm rollback dev-helm 1` - rolls back to previous version  
 `helm uninstall dev-helm` - uninstalls the helm chart, deployment and configmap
 
 ## Troubleshooting 
