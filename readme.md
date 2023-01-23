@@ -116,6 +116,17 @@ The example microservices consists of the following modules:
 - **employee-service** - a module containing the first of our sample microservices that allows to perform CRUD operation on Mongo repository of employees
 - **department-service** - a module containing the second of our sample microservices that allows to perform CRUD operation on Mongo repository of departments. It communicates with employee-service. 
 
+## Helm
+
+Ensure existing employee deployment is uninstalled
+
+`cd employee-service`
+`helm install dev-helm helm -f helm/values-dev.yaml` - note this also installs the configmap springboot-configuration (if its already installed this command will fail and you will need to delete the configmap)
+`helm ls - a` - shows our installed helm chart
+`helm upgrade dev-helm helm -f helm/values-dev.yaml` - after updating values-dev.yaml run this command. Note just changing databaseName will not have any affect.  The deployment need to be modified hence update containerName
+`helm rollback dev-helm 1` - rolls back to previous version
+`helm uninstall dev-helm` - uninstalls the helm chart, deployment and configmap
+
 ## Troubleshooting 
 
 To debug do `kubectl port-forward <your pod name> 5005:5005` and then attach debugger in IDE - https://refactorfirst.com/how-to-remote-debug-java-application-on-kubernetes

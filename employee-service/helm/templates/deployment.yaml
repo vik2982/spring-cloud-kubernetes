@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee
+  labels:
+    app: employee
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: employee
+  template:
+    metadata:
+      labels:
+        app: employee
+    spec:
+      containers:
+      - name: {{ .Values.containerName }}
+        image: vik/employee:1.0    # For GKE use image: gcr.io/cryptic-acrobat-371412/vik/employee:1.0
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 3
+        env:    
+        - name: SPRING_DATA_MONGODB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-username
+        - name: SPRING_DATA_MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: mongo-root-password
+        - name: SPRING_DATA_MONGODB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: mongodb-configmap
+              key: database_url
+        #- name: SPRING_APPLICATION_JSON
+        #  valueFrom:
+        #    configMapKeyRef:
+        #      name: springboot-configuration
+        #      key: dev-config.json
+        volumeMounts:
+          - name: app-config-vol
+            mountPath: /usr/apps/config
+      volumes:
+        - name: app-config-vol
+          configMap:
+            name: springboot-configuration
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: employee
+  labels:
+    app: employee
+    spring-boot: "true"
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    app: employee
+  type: ClusterIP
