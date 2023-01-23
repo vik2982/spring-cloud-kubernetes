@@ -8,6 +8,12 @@ Prerequisite - Knowledge of spring boot, docker and kubernetes.
 I have tested the solution on a local Kubernetes single node cluster using docker desktop on mac.   
 I have also tested on a multiple node cluster using GKE.
 
+## Architecture
+
+The example microservices consists of the following modules:
+- **employee-service** - a module containing the first of our sample microservices that allows to perform CRUD operation on Mongo repository of employees
+- **department-service** - a module containing the second of our sample microservices that allows to perform CRUD operation on Mongo repository of departments. It communicates with employee-service. 
+
 ## Usage
 
 1. `kubectl create ns vik` - Create new kubernetes namespace 
@@ -102,6 +108,8 @@ The last curl demonstrates inter service communication where department-service 
 
 ### Health URLS
 
+For local docker-desktop replace {ingress_ip} with microservices.info.  For GKE replace with ip of ingress service - `kubectl get ingress`
+
 http://{ingress_ip}/employee/actuator/health  
 http://{ingress_ip}/employee/actuator/health/liveness  
 http://{ingress_ip}/employee/actuator/health/readiness
@@ -110,15 +118,9 @@ http://{ingress_ip}/department/actuator/health
 http://{ingress_ip}/department/actuator/health/liveness  
 http://{ingress_ip}/department/actuator/health/readiness
 
-## Architecture
+### Helm
 
-The example microservices consists of the following modules:
-- **employee-service** - a module containing the first of our sample microservices that allows to perform CRUD operation on Mongo repository of employees
-- **department-service** - a module containing the second of our sample microservices that allows to perform CRUD operation on Mongo repository of departments. It communicates with employee-service. 
-
-## Helm
-
-Ensure existing employee deployment is uninstalled
+Delete any existing employee deployment and configmap springboot-configuration
 
 `cd employee-service`  
 `helm install dev-helm helm -f helm/values-dev.yaml` - note this also installs the configmap springboot-configuration (if its already installed this command will fail and you will need to delete the configmap)  
