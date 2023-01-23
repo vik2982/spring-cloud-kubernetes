@@ -46,8 +46,9 @@ You can also change the type of the service in mongo-express.yaml to LoadBalance
 `docker push gcr.io/${GOOGLE_CLOUD_PROJECT}/vik/employee:1.0`
 2. Update the image in deployment.yaml to use the image from container registry
 #### Local docker-desktop and GKE
-1. Apply all templates using command: `kubectl apply -f deployment.yaml`
-2. Check status with `kubectl get all` and `kubectl logs {pod-name}`
+1. `kubectl apply -f springboot-configmap.yaml` - for employee service   
+2. `kubectl apply -f deployment.yaml` - for both services  
+3. Check status with `kubectl get all` and `kubectl logs {pod-name}`
 
 ### Ingress
 1. `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.1/deploy/static/provider/cloud/deploy.yaml` - Install ingress
