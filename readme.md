@@ -6,7 +6,7 @@ In this project I demonstrate an implementation of spring cloud microservices de
 ## Getting Started 
 Prerequisite - Knowledge of spring boot, docker and kubernetes.  
 I have tested the solution on a local Kubernetes single node cluster using docker desktop on mac.   
-I have also tested on a multiple node cluster using GKE.
+I have also tested on a multiple node private GKE cluster.
 
 ## Architecture
 
@@ -32,10 +32,13 @@ Mongo express is accessible at `http://localhost:30000`
 You can create more databases via mongo express but you will need to assign users to the newly created database - https://www.mongodb.com/docs/manual/tutorial/create-users/.  Open interactive terminal in the mongo pod and then you can execute the commands
 
 #### GKE
-Ensure you have a firewall rule to allow ingress to the node on port 30000 - `gcloud compute firewall-rules create test-node-port --allow tcp:30000`  
+
+Do `kubectl get service` and see the mongo-express-service.  Mongo express is accessible at `http://{service_external_ip):8081` (where 8081 is defined as the service port)
+
+You can also change the type of the service in mongo-express.yaml to LoadBalancer when using GKE.  In which case ensure you have a firewall rule to allow ingress to the node on port 30000 - `gcloud compute firewall-rules create test-node-port --allow tcp:30000`  
 Do `kubectl get node -o wide` and see the external ip address of the node - Mongo express is accessible at `http://{node_external_ip):30000`  If you have multiple nodes you can use any node as services span nodes.   
 
-You can also change the type of the service in mongo-express.yaml to LoadBalancer when using GKE.  In which case do `kubectl get service` and see the mongo-express-service.  Mongo express is accessible at `http://{service_external_ip):8081` (where 8081 is defined as the service port)
+NOTE: to use nodeport your cluster must be non private which is not advisable.  
 
 ### Build and deploy microservices
 1. `mvn clean package` - In root folder this will build both modules employee and department 
