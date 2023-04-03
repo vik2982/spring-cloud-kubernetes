@@ -40,8 +40,6 @@ Do `kubectl get service` and see the mongo-express-service.  Mongo express is ac
 If defining the type of the service in mongo-express.yaml as NodePort when using GKE ensure you have a firewall rule to allow ingress to the node on port 30000 - `gcloud compute firewall-rules create test-node-port --allow tcp:30000`  
 Do `kubectl get node -o wide` and see the external ip address of the node - Mongo express is accessible at `http://{node_external_ip):30000`  If you have multiple nodes you can use any node as services span nodes.   
 
-NOTE: to use nodeport your cluster must be non private which is not advisable.  
-
 ### Build and deploy microservices
 1. `mvn clean package` - In root folder this will build both modules employee and department 
 2. Build Docker images for each module using command, for example: `docker build -t vik/employee:1.0 .`
