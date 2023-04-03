@@ -25,7 +25,7 @@ Go to the `k8s` directory. Here several YAML scripts need to be applied before r
 1. `kubectl apply -f mongo-secret.yaml` - credentials for MongoDB
 2. `kubectl apply -f mongo-configmap.yaml` - user for MongoDB
 3. `kubectl apply -f mongo.yaml` - Deployment for MongoDB
-4. `kubectl apply -f mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db
+4. `kubectl apply -f mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db.  For GKE change the type of the service in mongo-express.yaml to LoadBalancer.
 
 #### Local docker-desktop
 Mongo express is accessible at `http://localhost:30000`  
@@ -33,9 +33,11 @@ You can create more databases via mongo express but you will need to assign user
 
 #### GKE
 
+With a private GKE cluster you expose mongo express via an external load balancer.  If you have setup a non private cluster (not advisable as your vms will have public ips) you can also expose mongo express via NodePort service type.
+
 Do `kubectl get service` and see the mongo-express-service.  Mongo express is accessible at `http://{service_external_ip):8081` (where 8081 is defined as the service port)
 
-You can also change the type of the service in mongo-express.yaml to LoadBalancer when using GKE.  In which case ensure you have a firewall rule to allow ingress to the node on port 30000 - `gcloud compute firewall-rules create test-node-port --allow tcp:30000`  
+If defining the type of the service in mongo-express.yaml as NodePort when using GKE ensure you have a firewall rule to allow ingress to the node on port 30000 - `gcloud compute firewall-rules create test-node-port --allow tcp:30000`  
 Do `kubectl get node -o wide` and see the external ip address of the node - Mongo express is accessible at `http://{node_external_ip):30000`  If you have multiple nodes you can use any node as services span nodes.   
 
 NOTE: to use nodeport your cluster must be non private which is not advisable.  
