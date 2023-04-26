@@ -140,6 +140,7 @@ Delete any existing employee deployment and configmap springboot-configuration
 ## Troubleshooting 
 
 To debug do `kubectl port-forward <your pod name> 5005:5005` and then attach debugger in IDE - https://refactorfirst.com/how-to-remote-debug-java-application-on-kubernetes.  
+  
 On private GKE cluster when executing `kubectl apply -f ingress-gke.yaml` you may receive an error.  In which case delete ingress webhook - see second answer here https://stackoverflow.com/questions/61616203/nginx-ingress-controller-failed-calling-webhook
 
 
