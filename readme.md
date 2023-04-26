@@ -124,7 +124,7 @@ http://{ingress_ip}/department/actuator/health/readiness
 
 ### Shell script
 
-To automate running of above commands cd to root of project and run `. kubernetes.sh`  
+To automate running of above commands cd to root of project and run `. script.sh`  
 
 ### Helm
 
