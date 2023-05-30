@@ -6,7 +6,6 @@ SOURCE_DIR=$HOME/'spring-cloud-kubernetes'
 kubectl delete ns $NAMESPACE
 kubectl create namespace $NAMESPACE
 kubectl delete ns $INGRESS_NAMESPACE
-kubectl create namespace $INGRESS_NAMESPACE
 kubens $NAMESPACE
 
 # db setup
