@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: department
-        image: vik/department:1.0       # For GKE use image: gcr.io/cryptic-acrobat-371412/vik/department:1.0
+        image: vik/department:1.0       # For GKE use image: gcr.io/$DEVSHELL_PROJECT_ID/vik/department:1.0
         ports:
         - containerPort: 8080
         livenessProbe:
