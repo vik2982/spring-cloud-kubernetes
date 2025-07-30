@@ -20,6 +20,11 @@ The example microservices consists of the following modules:
 2. `kubens vik` - use newly created namespace
 3. `kubectl apply -f privileges.yaml` - Spring Cloud Kubernetes requires access to the Kubernetes API in order to be able to retrieve a list of addresses for pods running for a single service
 
+Alternative way to create namespace: <br/>
+`kubectl create namespace vik`<br/>
+`kubectl get namespaces`<br/>
+`kubectl config set-context --current --namespace=vik` - switch namespace
+
 ### Database setup
 Go to the `k8s` directory. Here several YAML scripts need to be applied before running the microservices.
 1. `kubectl apply -f mongo-secret.yaml` - credentials for MongoDB
@@ -28,7 +33,7 @@ Go to the `k8s` directory. Here several YAML scripts need to be applied before r
 4. `kubectl apply -f mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db.  For GKE change the type of the service in mongo-express.yaml to LoadBalancer.
 
 #### Local docker-desktop
-Mongo express is accessible at `http://localhost:30000`  
+Mongo express is accessible at `http://localhost:30000`  (if login needed use admin/pass)<br/>
 You can create more databases via mongo express but you will need to assign users to the newly created database - https://www.mongodb.com/docs/manual/tutorial/create-users/.  Open interactive terminal in the mongo pod and then you can execute the commands
 
 #### GKE
