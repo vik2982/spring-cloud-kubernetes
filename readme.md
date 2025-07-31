@@ -71,7 +71,7 @@ Do `kubectl get node -o wide` and see the external ip address of the node - Mong
 3. Check status with `kubectl get all` and `kubectl logs {pod-name}`
 
 ### Ingress
-1. `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.1/deploy/static/provider/cloud/deploy.yaml` - Install ingress
+1. `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.13.0/deploy/static/provider/cloud/deploy.yaml` - Install ingress
 2. `kubens ingress-nginx` - Move to the newly created namespace ingress-nginx 
 3. `kubectl get all` - Check the nginx-controller pod in this namespace is running
 
@@ -83,7 +83,7 @@ Do `kubectl get node -o wide` and see the external ip address of the node - Mong
 #### AWS
 1. Browse to the external ip of the nginx-controller Loadbalancer service in the ingress-nginx namespace.  You should see a 404 nginx page
 2. `kubectl config set-context --current --namespace=vik` 
-3. `kubectl apply -f ingress-gke.yaml`
+3. `kubectl apply -f ingress-aws.yaml`
 4. `kubectl get ingress` - note the address (it will be the same as the address you browsed to where you got the 404 page)
 
 <!--   
