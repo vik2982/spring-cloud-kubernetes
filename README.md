@@ -1,19 +1,44 @@
-# Microservices with Spring Boot and Spring Cloud on Kubernetes
+#  Spring Boot Microservices deployed on Kubernetes
 
-In this project I demonstrate an implementation of spring cloud microservices deployed on Kubernetes. 
+In this project I demonstrate an implementation of spring cloud microservices deployed on Kubernetes. <br/>
 
-
-## Getting Started 
-Prerequisite - Knowledge of spring boot, docker and kubernetes.  
-I have tested the solution on a local Kubernetes single node cluster using docker desktop on mac.   
-I have also tested on a AWS EKS cluster
-<!-- I have also tested on a multiple node private GKE cluster. -->
+This project demonstrates the following microservice patterns:
+* **GATEWAY ROUTING PATTERN** - Using Ingress
+* **DISTRIBUTED TRACING** - Using spring cloud sleuth
+* **HEALTH CHECK** - Spring boot actuator and kubernetes container liveness and readiness probes
+* **SERVICE DISCOVERY** - Spring cloud feign and kubernetes services
 
 ## Architecture
 
 The example microservices consists of the following modules:
-- **employee-service** - a module containing the first of our sample microservices that allows to perform CRUD operation on Mongo repository of employees
-- **department-service** - a module containing the second of our sample microservices that allows to perform CRUD operation on Mongo repository of departments. It communicates with employee-service. 
+- *employee-service* - a module containing the first of our sample microservices that allows to perform CRUD operation on Mongo repository of employees
+- *department-service* - a module containing the second of our sample microservices that allows to perform CRUD operation on Mongo repository of departments. It communicates with employee-service.
+
+
+## Prerequisites
+
+* JDK 8
+* Maven Latest version
+* Latest Docker installation
+* AWS account (optional)
+
+<br/>
+I have tested the solution on a local Kubernetes single node cluster using docker desktop on mac. <br/>   
+I have also tested on a AWS EKS cluster
+<br/>
+
+**NOTE:** *If you only wish to test on local docker-desktop you can skip any of the proceeding steps related to AWS*
+### AWS setup
+Im AWS CLI we need to install kubectl and eksctl: <br/>
+
+`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"` <br/>
+`sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl` <br/>
+
+`cd spring-cloud-kubernetes/k8s` <br/>
+`chmod +x eksctl.sh` <br/>
+`sudo sh eksctl.sh`<br/>
+`eksctl create cluster --name test-cluster --region us-west-2 --version 1.33 --nodegroup-name linux-nodes --node-type t3.small --nodes 2 --managed`
+<!-- I have also tested on a multiple node private GKE cluster. -->
 
 ## Usage
 
@@ -26,15 +51,18 @@ Go to the `k8s` directory. Here several YAML scripts need to be applied before r
 1. `kubectl apply -f mongo-secret.yaml` - credentials for MongoDB
 2. `kubectl apply -f mongo-configmap.yaml` - user for MongoDB
 3. `kubectl apply -f mongo.yaml` - Deployment for MongoDB
-4. `kubectl apply -f mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db.  For GKE change the type of the service in mongo-express.yaml to LoadBalancer.
+4. `kubectl apply -f mongo-express.yaml` - Deployment for MongoExpress web console for interacting with mongo db.  For AWS you can set the type of the service in mongo-express.yaml to either NodePort or LoadBalancer.
 
 #### Local docker-desktop
 Mongo express is accessible at `http://localhost:30000`  (if login needed use admin/pass)<br/>
 You can create more databases via mongo express but you will need to assign users to the newly created database - https://www.mongodb.com/docs/manual/tutorial/create-users/.  Open interactive terminal in the mongo pod and then you can execute the commands
 
 #### AWS
-For one of the EC2 instances add a security group inbound rule: Custom TCP, Port Range 30000, Source My IP <br/>
-If you have multiple nodes you can use any node as services span nodes.  
+##### Mongo Express NodePort service type
+For any one of the EC2 instances add a security group inbound rule: Custom TCP, Port Range 30000, Source My IP <br/>
+Do `kubectl get node -o wide` and see the external ip address of the node - Mongo express is accessible at `http://{node_external_ip):30000`.  If you have multiple nodes you can use any node as services span nodes.  
+##### Mongo Express LoadBalancer service type
+Do `kubectl get service` and see the mongo-express-service.  Mongo express is accessible at `http://{service_external_ip):8081` (where 8081 is defined as the service port).  Note Mongo express will also be accessible at http://{node_external_ip):30000 as LoadBalancer is extension of NodePort.
 
 <!-- 
 #### GKE
@@ -57,6 +85,7 @@ Do `kubectl get node -o wide` and see the external ip address of the node - Mong
 `docker push vikrantardhawa/employee:1.0`
 2. In AWS CLI clone this git repo and update the image in deployment.yaml to use the image uploaded to docker hub
 
+NOTE: Can also use AWS ECR
 <!--
 #### GKE
 1. Upload the docker images to google container registry:  
@@ -147,6 +176,7 @@ http://{ingress_ip}/department/actuator/health
 http://{ingress_ip}/department/actuator/health/liveness  
 http://{ingress_ip}/department/actuator/health/readiness
 
+<!--
 ### Shell script
 
 To automate running of above commands cd to root of project and run `. script.sh`  
@@ -161,6 +191,7 @@ Delete any existing employee deployment and configmap springboot-configuration
 `helm upgrade dev-helm helm -f helm/values-dev.yaml` - after updating values-dev.yaml run this command. Note just changing databaseName will not have any affect.  The deployment need to be modified hence update containerName  
 `helm rollback dev-helm 1` - rolls back to previous version  
 `helm uninstall dev-helm` - uninstalls the helm chart, deployment and configmap
+-->
 
 ## Troubleshooting 
 

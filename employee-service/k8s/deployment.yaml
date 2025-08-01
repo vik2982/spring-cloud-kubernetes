@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: employee
-        image: vik/employee:1.0    # For GKE use image: gcr.io/$DEVSHELL_PROJECT_ID/vik/employee:1.0
+        image: vik/employee:1.0   
         ports:
         - containerPort: 8080
         livenessProbe:

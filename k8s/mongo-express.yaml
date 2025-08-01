@@ -43,7 +43,7 @@ metadata:
 spec:
   selector:
     app: mongo-express
-  type: NodePort # On GKE use LoadBalancer here instead.  The console will then be available at serviceip:serviceport  
+  type: NodePort # On AWS can use LoadBalancer here also.  The console will then be available at serviceip:serviceport
   ports:
     - protocol: TCP
       port: 8081
