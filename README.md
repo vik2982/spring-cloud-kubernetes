@@ -30,14 +30,15 @@ I have also tested on a AWS EKS cluster
 **NOTE:** *If you only wish to test on local docker-desktop you can skip any of the proceeding steps related to AWS*
 ### AWS setup
 Im AWS CLI we need to install kubectl and eksctl: <br/>
+```
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-`curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"` <br/>
-`sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl` <br/>
-
-`cd spring-cloud-kubernetes/k8s` <br/>
-`chmod +x eksctl.sh` <br/>
-`sudo sh eksctl.sh`<br/>
-`eksctl create cluster --name test-cluster --region us-west-2 --version 1.33 --nodegroup-name linux-nodes --node-type t3.small --nodes 2 --managed`
+cd spring-cloud-kubernetes/k8s
+chmod +x eksctl.sh
+sudo sh eksctl.sh
+eksctl create cluster --name test-cluster --region us-west-2 --version 1.33 --nodegroup-name linux-nodes --node-type t3.small --nodes 2 --managed
+```
 <!-- I have also tested on a multiple node private GKE cluster. -->
 
 ## Usage
@@ -128,7 +129,8 @@ NOTE: Can also use AWS ECR
 NOTE: When running on AWS replace microservices.info in the following commands with the ingress address as noted above
 
 Add data to employee table
-`curl --location --request POST 'http://microservices.info/employee' \
+```
+curl --location --request POST 'http://microservices.info/employee' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "id" : "1",
@@ -137,12 +139,14 @@ Add data to employee table
     "name" : "vik",
     "age" : "40",
     "position" : "software developer"
-}'`
+}'
+```
 
 `curl --location --request GET 'http://microservices.info/employee'`
 
 Add data to department table
-`curl --location --request POST 'http://microservices.info/department' \
+```
+curl --location --request POST 'http://microservices.info/department' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "id" : "1",
@@ -158,7 +162,8 @@ Add data to department table
         "position": "software developer"
     }
 ]
-}'`
+}'
+```
 
 `curl --location --request GET 'http://microservices.info/department/feign'`
 
@@ -167,7 +172,7 @@ The last curl demonstrates inter service communication where department-service 
 ### Health URLS
 
 For local docker-desktop replace {ingress_ip} with microservices.info.  For AWS replace with ip of ingress service - `kubectl get ingress`
-
+```
 http://{ingress_ip}/employee/actuator/health  
 http://{ingress_ip}/employee/actuator/health/liveness  
 http://{ingress_ip}/employee/actuator/health/readiness
@@ -175,14 +180,66 @@ http://{ingress_ip}/employee/actuator/health/readiness
 http://{ingress_ip}/department/actuator/health  
 http://{ingress_ip}/department/actuator/health/liveness  
 http://{ingress_ip}/department/actuator/health/readiness
-
-<!--
+```
+<!-- 
 ### Shell script
 
 To automate running of above commands cd to root of project and run `. script.sh`  
+-->
+## Advanced Topics
+
+### Hashicorp Vault
+
+Typically secrets would not be kept in a file in github.  For enhanced security and centralized secrets management, we can use
+external secrets managers like HashiCorp Vault.  The following steps store confidential data outside the cluster (in HashiCorp Vault) and then 
+we implement kubernetes components which generate a secret that references this confidential data via ESO
+
+* Run hashicorp vault locally as docker container
+```
+cd k8s/vault
+docker compose up -d
+```
+* In browser navigate to localhost:8200 and create secret for mongo-root-username and mongo-root-password - follow here https://www.youtube.com/watch?v=CF6ARIXdA4A
+* Install ESO - helm install required
+```
+# Add the External Secrets Helm repository
+helm repo add external-secrets https://charts.external-secrets.io
+
+# Update Helm repositories
+helm repo update
+
+# Install External Secrets Operator
+helm install external-secrets external-secrets/external-secrets \
+--namespace external-secrets \
+--create-namespace \
+--version 0.15.0
+```
+* Create a Kubernetes secret with the Vault token (authentication for vault) - used by ClusterSecretStore
+```
+kubectl create secret generic vault-token \
+  --namespace vik \
+  --from-literal=token=root
+```
+* Apply ClusterSecretStore - defines connection to vault
+```
+cd ..
+kubectl apply -f secret-store.yaml
+kubectl get clustersecretstore
+kubectl describe clustersecretstore vault-backend
+```
+* Apply ExternalSecret - references values in vault and automatically generates secrets
+```
+kubectl delete secret mongodb-secret
+kubectl apply -f external-secret-dev.yaml
+kubectl get externalsecret
+kubectl describe externalsecret  mongo-db-credentials
+```
+<!-- kubectl delete externalsecret mongo-db-credentials -->
+* `kubectl get secret` - shows mongodb-secret has been created
 
 ### Helm
 
+We can leverage helm to define properties for different environments and then use those properties within our deployment yaml, hence allowing for a single deployment yaml for all envs<br/>
 Delete any existing employee deployment and configmap springboot-configuration
 
 `cd employee-service`  
@@ -191,7 +248,7 @@ Delete any existing employee deployment and configmap springboot-configuration
 `helm upgrade dev-helm helm -f helm/values-dev.yaml` - after updating values-dev.yaml run this command. Note just changing databaseName will not have any affect.  The deployment need to be modified hence update containerName  
 `helm rollback dev-helm 1` - rolls back to previous version  
 `helm uninstall dev-helm` - uninstalls the helm chart, deployment and configmap
--->
+
 
 ## Troubleshooting 
 
