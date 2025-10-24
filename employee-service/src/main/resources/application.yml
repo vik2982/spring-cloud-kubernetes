@@ -1,24 +1,8 @@
 spring:
   application:
     name: employee
-  data:
-    mongodb:
-      # blah values overidden by env values defined in deployment.yaml and external /config/application.properties
-      host: blah
-      database: blah
-      username: blah
-      password: blah
-  output.ansi.enabled: ALWAYS
 
 logging:
   pattern: 
-    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %X{traceId:-} %X{spanId:-} %m%n"
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    health:
-      show-details: ALWAYS

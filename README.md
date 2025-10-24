@@ -4,9 +4,9 @@ In this project I demonstrate an implementation of spring cloud microservices de
 
 This project demonstrates the following microservice patterns:
 * **GATEWAY ROUTING PATTERN** - Using Ingress
-* **DISTRIBUTED TRACING** - Using spring cloud sleuth
+* **DISTRIBUTED TRACING** - Using micrometer
 * **HEALTH CHECK** - Spring boot actuator and kubernetes container liveness and readiness probes
-* **SERVICE DISCOVERY** - Spring cloud feign and kubernetes services
+* **SERVICE DISCOVERY** - Spring cloud kubernetes and feign
 
 ## Architecture
 
@@ -17,7 +17,7 @@ The example microservices consists of the following modules:
 
 ## Prerequisites
 
-* JDK 8
+* JDK 25
 * Maven Latest version
 * Latest Docker installation
 * AWS account (optional)
@@ -44,8 +44,8 @@ eksctl create cluster --name test-cluster --region us-west-2 --version 1.33 --no
 ## Usage
 
 1. `kubectl create ns vik` - Create new kubernetes namespace 
-2. `kubectl config set-context --current --namespace=vik` - use newly created namespace
-3. `kubectl apply -f privileges.yaml` - Spring Cloud Kubernetes requires access to the Kubernetes API in order to be able to retrieve a list of addresses for pods running for a single service
+2. `kubectl config set-context --current --namespace=vik` - use newly created namespace. If you have kubens installed you can do `kubens vik` instead
+3. `kubectl apply -f k8s/privileges.yaml` - Spring Cloud Kubernetes requires access to the Kubernetes API in order to be able to retrieve a list of addresses for pods running for a single service
 
 ### Database setup
 Go to the `k8s` directory. Here several YAML scripts need to be applied before running the microservices.
@@ -239,15 +239,19 @@ kubectl describe externalsecret  mongo-db-credentials
 
 ### Helm
 
-We can leverage helm to define properties for different environments and then use those properties within our deployment yaml, hence allowing for a single deployment yaml for all envs<br/>
-Delete any existing employee deployment and configmap springboot-configuration
+In employee service deployment yaml you may notice that SPRING_PROFILES_ACTIVE has been hardcoded with the value of 'local'.  Ideally this value should be dynamic. We can use helm for this purpose
 
-`cd employee-service`  
-`helm install dev-helm helm -f helm/values-dev.yaml` - note this also installs the configmap springboot-configuration (if its already installed this command will fail and you will need to delete the configmap)  
+```
+// Delete employee deployment and configmap
+cd employee-service
+kubectl delete -f k8s/deployment.yaml
+kubectl delete configmap springboot-configuration
+```
+`helm install local-helm helm -f helm/values-local.yaml` - note this also installs the configmap springboot-configuration (if its already installed this command will fail and you will need to delete the configmap)  
 `helm ls - a` - shows our installed helm chart  
-`helm upgrade dev-helm helm -f helm/values-dev.yaml` - after updating values-dev.yaml run this command. Note just changing databaseName will not have any affect.  The deployment need to be modified hence update containerName  
-`helm rollback dev-helm 1` - rolls back to previous version  
-`helm uninstall dev-helm` - uninstalls the helm chart, deployment and configmap
+`helm upgrade local-helm helm -f helm/values-local.yaml` - after updating values-local.yaml run this command. Note just changing databaseName will not have any affect.  The deployment need to be modified hence update containerName  
+`helm rollback local-helm 1` - rolls back to previous version  
+`helm uninstall local-helm` - uninstalls the helm chart, deployment and configmap
 
 
 ## Troubleshooting 

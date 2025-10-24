@@ -15,7 +15,7 @@ spec:
         app: employee
     spec:
       containers:
-      - name: {{ .Values.containerName }}
+      - name: employee
         image: vik/employee:1.0    # For GKE use image: gcr.io/$DEVSHELL_PROJECT_ID/vik/employee:1.0
         ports:
         - containerPort: 8080
@@ -31,7 +31,7 @@ spec:
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 3
-        env:    
+        env:
         - name: SPRING_DATA_MONGODB_USERNAME
           valueFrom:
             secretKeyRef:
@@ -47,6 +47,8 @@ spec:
             configMapKeyRef:
               name: mongodb-configmap
               key: database_url
+        - name: SPRING_PROFILES_ACTIVE
+          value: {{ quote .Values.springProfile }}
         #- name: SPRING_APPLICATION_JSON
         #  valueFrom:
         #    configMapKeyRef:

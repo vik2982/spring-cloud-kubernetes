@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine
+FROM openjdk:25-jdk
 ENV APP_FILE employee-service-1.0.jar
 ENV APP_HOME /usr/apps
 EXPOSE 8080

@@ -1,0 +1,21 @@
+spring:
+  data:
+    mongodb:
+      # blah values overidden by env values defined in deployment.yaml and external /config/application.properties
+      host: blah
+      database: blah
+      username: blah
+      password: blah
+  output.ansi.enabled: ALWAYS
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: ALWAYS
+  tracing:
+    sampling:
+      probability: 1.0

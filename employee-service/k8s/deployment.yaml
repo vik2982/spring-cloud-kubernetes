@@ -47,6 +47,8 @@ spec:
             configMapKeyRef:
               name: mongodb-configmap
               key: database_url
+        - name: SPRING_PROFILES_ACTIVE
+          value: "local"
         #- name: SPRING_APPLICATION_JSON
         #  valueFrom:
         #    configMapKeyRef:

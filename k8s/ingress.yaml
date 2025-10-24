@@ -10,14 +10,14 @@ spec:
   - host: microservices.info
     http:
       paths:
-      - pathType: Prefix
+      - pathType: ImplementationSpecific
         path: "/employee(/|$)(.*)"
         backend:
           service:          
             name: employee
             port: 
               number: 8080
-      - pathType: Prefix
+      - pathType: ImplementationSpecific
         path: "/department(/|$)(.*)"
         backend:
           service:          

@@ -29,19 +29,19 @@ public class EmployeeController {
   }
 
   @GetMapping("/{id}")
-  public Employee findById(@PathVariable("id") String id) {
+  public Employee getByEmployeeId(@PathVariable("id") String id) {
     LOGGER.info("Employee find: id={}", id);
     return repository.findById(id).get();
   }
 
   @GetMapping("/")
-  public Iterable<Employee> findAll() {
+  public Iterable<Employee> getAllEmployees() {
     LOGGER.info("Employee find");
     return repository.findAll();
   }
 
   @GetMapping("/department/{departmentId}")
-  public List<Employee> findByDepartment(@PathVariable("departmentId") String departmentId) {
+  public List<Employee> getByDepartmentId(@PathVariable("departmentId") String departmentId) {
     LOGGER.info("Employee find: departmentId={}", departmentId);
     return repository.findByDepartmentId(departmentId);
   }

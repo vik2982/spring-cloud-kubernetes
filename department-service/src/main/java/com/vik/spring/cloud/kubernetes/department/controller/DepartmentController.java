@@ -29,7 +29,8 @@ public class DepartmentController {
   }
 
   @GetMapping("/feign")
-  public List<Employee> listRest() {
+  public List<Employee> getByDeptIdFeign() {
+    LOGGER.info("Feign call employee service");
     return employeeClient.findByDepartment("1");
   }
 
@@ -40,13 +41,13 @@ public class DepartmentController {
   }
 
   @GetMapping("/{id}")
-  public Department findById(@PathVariable("id") String id) {
+  public Department getByDeptId(@PathVariable("id") String id) {
     LOGGER.info("Department find: id={}", id);
     return repository.findById(id).get();
   }
 
   @GetMapping("/")
-  public Iterable<Department> findAll() {
+  public Iterable<Department> getAllDepartments() {
     LOGGER.info("Department find");
     return repository.findAll();
   }
